@@ -1,36 +1,35 @@
 <template>
-  <!-- <h3 class="text-center">Выбрать данные</h3> -->
-
-  <div class="filter">
-    <h4 class="text-black">Начало:</h4>
-    <div class="form-control">
-      <input type="date" v-model="dateStart" />
-    </div>
-    <div class="form-control">
-      <input type="time" v-model="timeStart" />
-    </div>
+  <div class="form-control">
+    <label for="type">Тип отчёта</label>
+    <select id="type" v-model="reportType">
+      <option disabled selected value="month">Выберите тип отчёта:</option>
+      <option value="month">Месячный</option>
+      <option value="week">Недельный</option>
+      <option value="date">Дневной</option>
+    </select>
   </div>
-
-  <div class="filter">
-    <h4 class="text-black">Конец:</h4>
-    <div class="form-control">
-      <input type="date" v-model="dateEnd" />
-    </div>
-    <div class="form-control">
-      <input type="time" v-model="timeEnd" />
-    </div>
+  <div v-if="reportType" class="form-control">
+    <label for="date">{{ typeMap[reportType] }}</label>
+    <input id="date" :type="reportType" v-model="dateStart" />
   </div>
+  <!-- </form> -->
 </template>
 
 <script>
 import dateFormat from 'dateformat'
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, reactive } from 'vue'
 export default {
   emits: ['update:modelValue'],
   props: ['modelValue'],
   setup(_, { emit }) {
     const d = new Date()
     const timeEnd = ref(d.toLocaleTimeString().slice(0, -3))
+    const reportType = ref('')
+    const typeMap = reactive({
+      week: 'Введите неделю',
+      month: 'Введите месяц',
+      date: 'Введите день',
+    })
     const dateStart = ref('')
     const dateEnd = ref(dateFormat(d, 'isoDate'))
     const timeStart = ref('')
@@ -56,6 +55,8 @@ export default {
       dateEnd,
       timeStart,
       allIuputs,
+      reportType,
+      typeMap,
     }
   },
 }
