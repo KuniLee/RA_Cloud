@@ -22,28 +22,29 @@ export default {
     // },
   },
   actions: {
-    async downloadByTime({ state }, { startDT, endDT }) {
-      //console.log(startDT, endDT)
+    async report({ state }, { type: reportType, date, offsetInHours }) {
+      const typeMap = { week: 'DAYOFMONTH', month: 'DAYOFMONTH', date: 'hour' }
       const query = `
       query{
-        downloadByTime(
-         timeStart:"${startDT}", timeEnd:"${endDT}"
+        report(
+          reportType:"${reportType}", date:"${date}", offsetInHours:"${offsetInHours}"
         ) {
-          timestamp value parameter
+          average ${typeMap[reportType]} parameter
         }
       }  
       `
       try {
         const { data } = await instance
           .post('/', JSON.stringify({ query: query }))
-          .catch(function(error) {
+          .catch(function (error) {
             // handle error
             console.log('Ошибка загрузки:', error)
           })
-        //state.dataBaseData = data.data.getValues
-        state.dataBaseData = data.data.downloadByTime.sort(
-          (a, b) => +a.timestamp - +b.timestamp
-        )
+        //console.log('полученно', data.data.report)
+        state.dataBaseData = data.data.report
+        //state.dataBaseData = data.data.report.sort(
+        //  (a, b) => +a.timestamp - +b.timestamp
+        //)
       } catch (e) {
         dispatch(
           'setMessage',

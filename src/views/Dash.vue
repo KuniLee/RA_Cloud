@@ -13,13 +13,18 @@
         <h3>Влажность: {{ humid }}%</h3>
       </div>
     </div>
-    <button class="btn primary" @click="modal = true">
-      Загрузить
-    </button>
+    <button class="btn primary" @click="modal = true">Загрузить</button>
 
     <app-loader v-if="loading"></app-loader>
     <div>
-      <chart v-if="requests.length !== 0" :chartData="requests"></chart>
+      <chart
+        v-if="requests.length !== 0 && !loading"
+        :chartData="requests"
+      ></chart>
+
+      <h3 class="text-center text-black" v-if="noDataMsg && !loading">
+        Нет данных
+      </h3>
 
       <!-- <request-table  :noteData="requests"></request-table> -->
     </div>
@@ -27,7 +32,7 @@
     <teleport to="body">
       <app-model v-if="modal" title="Загрузить данные" @close="modal = false">
         <report-input v-model="input"></report-input>
-        <request-filter v-model="filter"></request-filter>
+        <!-- <request-filter v-model="filter"></request-filter> -->
         <button class="btn danger" :disabled="!enable" @click="makeRequest">
           Загрузить
         </button>
@@ -39,11 +44,11 @@
 
 <script>
 import { io } from 'socket.io-client'
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import RequestTable from '../components/dataTable/RequestTable.vue'
 import AppPage from '../components/ui/AppPage.vue'
 import AppModel from '../components/ui/AppModel.vue'
-import RequestFilter from '../components/dataTable/RequestFilter.vue'
+//import RequestFilter from '../components/dataTable/RequestFilter.vue'
 import ReportInput from '../components/dataTable/ReportInput.vue'
 import RequestModal from '../components/request/RequestModal.vue'
 import AppLoader from '../components/ui/AppLoader.vue'
@@ -58,7 +63,7 @@ export default {
     AppModel,
     RequestModal,
     AppLoader,
-    RequestFilter,
+    //RequestFilter,
     ReportInput,
     Chart,
   },
@@ -67,10 +72,12 @@ export default {
     const modal = ref(false)
     const store = useStore()
     const loading = ref(false)
-    const filter = ref('')
+    const noDataMsg = ref(false)
+    //const filter = ref('')
     const input = ref({
-      startDT: null,
-      endDT: null,
+      type: null,
+      date: null,
+      offsetInHours: null,
     })
     const temp = ref('-')
     const humid = ref('-')
@@ -83,18 +90,15 @@ export default {
       temp.value = msg.value
     })
 
-    const enable = computed(
-      () =>
-        input.value.startDT &&
-        input.value.endDT &&
-        input.value.startDT < input.value.endDT
-    )
+    const enable = computed(() => input.value.type && input.value.date)
 
     const requests = computed(
       () => {
-        return store.getters['database/getData'].filter((request) =>
-          request.parameter.includes(filter.value)
-        )
+        return store.getters['database/getData']
+
+        // return store.getters['database/getData'].filter((request) =>
+        //   request.parameter.includes(filter.value)
+        // )
       }
 
       // .filter((request) => request.fio.includes(filter.value.name))
@@ -105,16 +109,22 @@ export default {
       modal,
       requests,
       loading,
-      filter,
+      //filter,
       input,
       temp,
       humid,
       enable,
+      noDataMsg,
       makeRequest: async () => {
         modal.value = false
         loading.value = true
-        await store.dispatch('database/downloadByTime', input.value)
+        await store.dispatch('database/report', input.value)
         loading.value = false
+        if (requests.value.length !== 0) {
+          noDataMsg.value = false
+        } else {
+          noDataMsg.value = true
+        }
       },
     }
   },

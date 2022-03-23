@@ -1,26 +1,19 @@
 <template>
-  <div class="filter">
-    <!-- <div class="form-control">
-      <input type="text" placeholder="Начните писать имя" v-model="name" />
-    </div> -->
-    <div class="form-control">
-      <select v-model="topic">
-        <option disabled selected value="">Выберите параметр</option>
-        <option value="">Всё</option>
-        <option value="temp">Температура</option>
-        <option value="humid">Влажность</option>
-        <!-- <option value="active">Активен</option>
+  <div class="form-control">
+    <label for="type">Параметр:</label>
+    <select id="param" v-model="topic">
+      <option id="param" disabled selected value="">Выберите параметр</option>
+      <option value="">Всё</option>
+      <option value="temp">Температура</option>
+      <option value="humid">Влажность</option>
+      <!-- <option value="active">Активен</option>
         <option value="pending">Выполняется</option> -->
-      </select>
-    </div>
-    <!-- <button v-if="isActive" class="btn danger" @click="reset">
-      Сброс
-    </button> -->
+    </select>
   </div>
 </template>
 
 <script>
-import { ref, watch, computed } from 'vue'
+import { ref, watch } from 'vue'
 export default {
   emits: ['update:modelValue'],
   props: ['modelValue'],

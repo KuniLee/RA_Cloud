@@ -5,9 +5,9 @@ export function dataForChart(arr) {
       old[item.parameter] !== undefined
         ? [
             ...old[item.parameter],
-            { x: (item.timestamp - 18000) * 1000, y: item.value },
+            { x: item[Object.keys(item)[1]], y: item.average },
           ]
-        : [{ x: (item.timestamp - 18000) * 1000, y: item.value }]
+        : [{ x: item[Object.keys(item)[1]], y: item.average }]
     return ar
   }, {})
 }

@@ -6,9 +6,8 @@
     :chartData="testData"
     :options="options"
   ></LineChart>
-  <button class="btn" @click="reset">
-    Сброс
-  </button>
+  <!-- кнопка сброса масштаба -->
+  <!-- <button class="btn" @click="reset">Сброс</button> -->
 </template>
 
 <script>
@@ -16,9 +15,10 @@ import { dataForChart } from '../../utils/dataForChart'
 import zoomPlugin from 'chartjs-plugin-zoom'
 import { Chart, registerables } from 'chart.js'
 import { LineChart } from 'vue-chart-3'
-import { ref, computed } from 'vue'
+import { ref, reactive, computed, watch } from 'vue'
 import 'chartjs-adapter-date-fns'
 import { useStore } from 'vuex'
+//import 'chartjs-adapter-date-fns'
 Chart.register(...registerables, zoomPlugin)
 Chart.defaults.datasets.line.showLine = true
 
@@ -27,77 +27,95 @@ export default {
   setup(props) {
     const store = useStore()
     const LineChartRef = ref()
-    const options = {
-      fill: false, //  закрашивает площадь снизу
-      interaction: {
-        mode: 'index',
-        intersect: false,
-      },
+    const options = computed(() => {
+      let opt = {
+        fill: false, //  закрашивает площадь снизу
+        interaction: {
+          mode: 'index',
+          intersect: false,
+        },
 
-      //showLine: true, // disable for all datasets,
-      layout: {
-        //padding: { right: 80 },
-      },
-      datasets: {
-        line: {
-          //pointRadius: 0.1, // disable for all `'line'` datasets
+        //showLine: true, // disable for all datasets,
+        layout: {
+          //padding: { right: 80 },
         },
-      },
-      scales: {
-        x: {
-          parsing: false,
-          type: 'time',
-          time: {
-            displayFormats: {
-              minute: 'kk:mm',
-              hour: 'kk:mm',
-              second: 'mm:ss',
+        datasets: {
+          line: {
+            //pointRadius: 0.1, // disable for all `'line'` datasets
+          },
+        },
+        scales: {
+          x: {
+            parsing: false,
+            type: 'time',
+            time: {
+              unit: 'day',
+              tooltipFormat: 'dd LLLL: H', // формат вывода даты в окошечко
+              minUnit: 'hour',
+              displayFormats: {
+                day: 'dd LLL',
+                hour: 'H',
+              },
             },
           },
         },
-      },
-      responsive: true,
-      plugins: {
-        zoom: {
-          limits: {
-            x: { min: 0, max: Date.now(), minRange: 50 },
-            // y: { min: 0, max: 100, minRange: 20 },
-          },
-          pan: {
-            enabled: false,
-            mode: 'x',
-            //threshold: 10,
-          },
+        responsive: true,
+        plugins: {
           zoom: {
-            wheel: {
-              enabled: true,
+            // limits: {
+            //   x: { min: 0, max: Date.now(), minRange: 50 },
+            //   // y: { min: 0, max: 100, minRange: 20 },
+            // },
+            pan: {
+              enabled: false,
+              mode: 'x',
+              //threshold: 10,
             },
-            pinch: {
-              enabled: true,
-            },
-            mode: 'x',
-            drag: {
-              enabled: true,
+            zoom: {
+              wheel: {
+                enabled: false,
+              },
+              pinch: {
+                enabled: false,
+              },
+              mode: 'x',
+              drag: {
+                enabled: false,
+              },
             },
           },
-        },
-        legend: {
-          labels: {
-            font: {
-              size: 14,
+          legend: {
+            labels: {
+              font: {
+                size: 14,
+              },
             },
+            position: 'left',
           },
-          position: 'left',
+
+          title: {
+            display: false,
+            text: 'Название графика',
+          },
         },
-        title: {
-          display: false,
-          text: 'Название графика',
-        },
-      },
-    }
+      }
+      if (props.chartData.length !== 0) {
+        if (props.chartData[0].hasOwnProperty('hour')) {
+          opt.scales.x.time.unit = 'hour'
+          opt.scales.x.time.tooltipFormat = 'час:H - dd LLLL R'
+        }
+
+        if (props.chartData[0].hasOwnProperty('DAYOFMONTH')) {
+          opt.scales.x.time.unit = 'day'
+          opt.scales.x.time.tooltipFormat = 'dd LLLL R'
+        }
+      }
+      return opt
+    })
     function reset() {
       LineChartRef.value.chartInstance.resetZoom()
     }
+
     const testData = computed(() => {
       const obj = dataForChart(props.chartData)
       const entries = Object.entries(obj)
@@ -106,7 +124,7 @@ export default {
         dataset.push({
           showLine: true,
           spanGaps: false,
-          pointRadius: 0,
+          pointRadius: 5,
           data: value,
           hidden: false,
           label: store.state.chart.labelMap[key],
@@ -114,15 +132,12 @@ export default {
           borderColor: store.state.chart.colorMap[key],
           //borderWidth: 8,
           color: store.state.chart.colorMap[key],
-          //pointStyle: 'triangle',
+          pointStyle: 'circle',
           rotation: 90,
           tension: 0.2,
         })
       })
-      // const { LineChartProps, LineChartRef } = useLineChart({
-      //   testData,
-      //   options,
-      // })
+
       return {
         datasets: dataset,
       }
