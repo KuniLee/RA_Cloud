@@ -4,7 +4,7 @@
 
     <div :class="['form-control', { invalid: eError }]">
       <label for="email">Email</label>
-      <input type="email" id="email" v-model="email" @blur="eBrur" />
+      <input placeholder="Тест: test@mail.ru пароль: 123456" type="email" id="email"  v-model="email" @blur="eBrur" />
       <small v-if="eError">{{ eError }}</small>
     </div>
 

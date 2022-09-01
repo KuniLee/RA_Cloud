@@ -2,7 +2,6 @@
   <!-- <main-layout></main-layout> -->
   <!-- <auth-layout></auth-layout> -->
   <component :is="layout + '-layout'" v-if="layout" />
-  <div></div>
 </template>
 <script>
 import { computed } from 'vue'
