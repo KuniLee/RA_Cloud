@@ -1,4 +1,18 @@
-# vue-practice-app
+# Project for temperature and humidity monitoring
+
+---
+[racloud.ru](http://racloud.ru/)
+---
+
+## Technologies: 
+* Vue.js 3
+* chart.js
+* vee-validate
+* vue-router
+* vuex
+* socket.io-client
+
+[Backend Source code](https://github.com/KuniLee/RA_server)
 
 ## Project setup
 ```
@@ -14,6 +28,3 @@ npm run serve
 ```
 npm run build
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
