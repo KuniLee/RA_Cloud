@@ -1,11 +1,16 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <HelloWorld msg="Vite + Vue" />
+  <h1>Работает</h1>
+  <h2>{{ msg }}</h2>
+  <button @click="log">Клик</button>
 </template>
 
-<style scoped>
+<script setup lang="ts">
+import { ref } from 'vue'
 
-</style>
+const msg = ref<'Hello' | 'Lol'>('Hello')
+
+const log = () => {
+  msg.value = 'Lol'
+}
+</script>
+<style scoped></style>
