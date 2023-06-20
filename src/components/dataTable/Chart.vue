@@ -1,11 +1,7 @@
 <template>
   <h3 class="text-black"></h3>
 
-  <LineChart
-    ref="LineChartRef"
-    :chartData="testData"
-    :options="options"
-  ></LineChart>
+  <LineChart ref="LineChartRef" :chart-data="testData" :options="options"></LineChart>
   <!-- кнопка сброса масштаба -->
   <!-- <button class="btn" @click="reset">Сброс</button> -->
 </template>
@@ -23,12 +19,14 @@ Chart.register(...registerables, zoomPlugin)
 Chart.defaults.datasets.line.showLine = true
 
 export default {
+  components: { LineChart },
   props: ['chartData'],
   setup(props) {
     const store = useStore()
     const LineChartRef = ref()
+
     const options = computed(() => {
-      let opt = {
+      const opt = {
         fill: false, //  закрашивает площадь снизу
         interaction: {
           mode: 'index',
@@ -99,6 +97,7 @@ export default {
           },
         },
       }
+
       if (props.chartData.length !== 0) {
         if (props.chartData[0].hasOwnProperty('hour')) {
           opt.scales.x.time.unit = 'hour'
@@ -110,8 +109,10 @@ export default {
           opt.scales.x.time.tooltipFormat = 'dd LLLL R'
         }
       }
+
       return opt
     })
+
     function reset() {
       LineChartRef.value.chartInstance.resetZoom()
     }
@@ -119,7 +120,8 @@ export default {
     const testData = computed(() => {
       const obj = dataForChart(props.chartData)
       const entries = Object.entries(obj)
-      const dataset = new Array()
+      const dataset = []
+
       entries.forEach(([key, value]) => {
         dataset.push({
           showLine: true,
@@ -145,7 +147,6 @@ export default {
 
     return { testData, options, LineChartRef, reset }
   },
-  components: { LineChart },
 }
 </script>
 

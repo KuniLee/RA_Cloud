@@ -11,16 +11,16 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    title: { type: String, required: true },
-    back: { type: Boolean, required: false, default: false },
+<script setup lang="ts">
+const props = defineProps({
+  title: {
+    type: String,
+    required: true,
   },
-  setup(props) {
-    document.title = `${props.title} | RA-Cloud`
-  },
-}
+  back: { type: Boolean, required: false, default: false },
+})
+
+document.title = `${props.title} | RA-Cloud`
 </script>
 
 <style></style>
