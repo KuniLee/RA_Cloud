@@ -7,7 +7,7 @@
   <!--  </div>-->
 </template>
 
-<script>
+<script lang="ts">
 import TheNavbar from '../components/TheNavbar.vue'
 //import TheSideBar from '../components/TheSideBar.vue'
 //import AppMessage from '../components/ui/AppMessage.vue'

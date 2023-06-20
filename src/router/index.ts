@@ -22,14 +22,15 @@ const routes: RouteRecordRaw[] = [
   //     auth: true,
   //   },
   // },
-  // {
-  //   path: '/auth',
-  //   name: 'Auth',
-  //   component: () => import('../views/Auth.vue'),
-  //   meta: {
-  //     layout: 'auth',
-  //   },
-  // },
+  {
+    path: '/auth',
+    name: 'Auth',
+    component: () => import('../views/Auth.vue'),
+    meta: {
+      auth: false,
+      layout: 'auth',
+    },
+  },
   //
   // {
   //   path: '/request/:id',
@@ -45,20 +46,22 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
   linkActiveClass: 'active',
   linkExactActiveClass: 'active',
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(),
   routes,
 })
 
-// router.beforeEach((to, from, next) => {
-//   const requireAuth = to.meta.auth
-//
-//   // if (requireAuth && store.getters['auth/isAuthenticated']) {
-//   //   next()
-//   // } else if (requireAuth && !store.getters['auth/isAuthenticated']) {
-//   //   next('/auth?message=auth')
-//   // } else {
-//   //   next()
-//   // }
-// })
+router.beforeEach((to, from, next) => {
+  const requireAuth = to.meta.auth
+
+  console.log(requireAuth)
+
+  // if (requireAuth && store.getters['auth/isAuthenticated']) {
+  //   next()
+  // } else if (requireAuth && !store.getters['auth/isAuthenticated']) {
+  //   next('/auth?message=auth')
+  // } else {
+  //   next()
+  // }
+})
 
 export default router
