@@ -1,7 +1,6 @@
 <template>
   <div class="container center">
     <app-message></app-message>
-
     <router-view></router-view>
   </div>
 </template>

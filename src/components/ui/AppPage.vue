@@ -1,8 +1,6 @@
 <template>
-  <div class="breadcrumbs" v-if="back">
-    <router-link class="text-black" to="/"
-      >Вернуться к списку заявок</router-link
-    >
+  <div v-if="back" class="breadcrumbs">
+    <router-link class="text-black" to="/">Вернуться к списку заявок</router-link>
   </div>
   <div class="card">
     <h1 class="card-title">

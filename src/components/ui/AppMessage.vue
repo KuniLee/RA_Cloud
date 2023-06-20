@@ -8,20 +8,20 @@
 
 <script>
 import { computed } from 'vue'
-import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 export default {
   setup() {
     const store = useStore()
     const message = computed(() => store.state.message)
-    const title = computed(() =>
-      message.value ? TITLE_MAP[message.value.type] : null
-    )
+
+    const title = computed(() => (message.value ? TITLE_MAP[message.value.type] : null))
+
     const TITLE_MAP = {
       primary: 'Успешно!',
       danger: 'Ошибка!',
       warning: 'Внимание!',
     }
+
     return { message, title, close: () => store.commit('clearMessage') }
   },
 }

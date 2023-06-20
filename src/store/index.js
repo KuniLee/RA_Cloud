@@ -4,14 +4,14 @@ import request from './modules/request.module'
 import database from './modules/databaseData.module'
 import chart from './modules/chart.module'
 
-const plugins = []
+//const plugins = []
 
-if (process.env.NODE_ENV === 'development') {
-  plugins.push(createLogger())
-}
+// if (process.env.NODE_ENV === 'development') {
+//   plugins.push(createLogger())
+// }
 
 export default createStore({
-  plugins,
+  // plugins,
   state() {
     return {
       message: null,

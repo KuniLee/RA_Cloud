@@ -1,16 +1,27 @@
 <template>
-  <h1>Работает</h1>
-  <h2>{{ msg }}</h2>
-  <button @click="log">Клик</button>
+  <!-- <main-layout></main-layout> -->
+  <!-- <auth-layout></auth-layout> -->
+  <component :is="layout + '-layout'" v-if="layout" />
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue'
+<script lang="ts">
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+//import AuthLayout from './layout/AuthLayout.vue'
+import MainLayout from './layout/MainLayout.vue'
 
-const msg = ref<'Hello' | 'Lol'>('Hello')
+export default {
+  components: {
+    MainLayout,
+    // AuthLayout
+  },
+  setup() {
+    const route = useRoute()
 
-const log = () => {
-  msg.value = 'Lol'
+    return {
+      layout: computed(() => route.meta.layout),
+    }
+  },
 }
 </script>
 <style scoped></style>
