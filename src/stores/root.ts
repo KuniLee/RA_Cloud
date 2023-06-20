@@ -7,7 +7,7 @@ interface State {
 
 type Message = {
   value: string
-  type: 'danger'
+  type: 'danger' | 'warning'
 }
 
 export const useRootStore = defineStore('root', {

@@ -6,24 +6,21 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { computed } from 'vue'
-import { useStore } from 'vuex'
-export default {
-  setup() {
-    const store = useStore()
-    const message = computed(() => store.state.message)
+import { useRootStore } from '../../stores/root'
 
-    const title = computed(() => (message.value ? TITLE_MAP[message.value.type] : null))
+const store = useRootStore()
+const message = computed(() => store.message)
 
-    const TITLE_MAP = {
-      primary: 'Успешно!',
-      danger: 'Ошибка!',
-      warning: 'Внимание!',
-    }
+const title = computed(() => (message.value ? TITLE_MAP[message.value.type] : null))
 
-    return { message, title, close: () => store.commit('clearMessage') }
-  },
+const close = () => store.clearMessage()
+
+const TITLE_MAP = {
+  primary: 'Успешно!',
+  danger: 'Ошибка!',
+  warning: 'Внимание!',
 }
 </script>
 

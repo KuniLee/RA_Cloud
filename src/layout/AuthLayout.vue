@@ -1,14 +1,14 @@
 <template>
   <div class="container center">
-    <!--    <app-message></app-message>-->
+    <app-message></app-message>
     <router-view></router-view>
   </div>
 </template>
 
 <script lang="ts">
-// import AppMessage from '../components/ui/AppMessage.vue'
+import AppMessage from '../components/ui/AppMessage.vue'
 export default {
-  // components: { AppMessage },
+  components: { AppMessage },
   setup() {
     document.title = `Вход | RA-Cloud`
   },

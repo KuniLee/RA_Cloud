@@ -1,6 +1,6 @@
-enum ERROR_CODES {
-  EMAIL_NOT_FOUND = 'Пользователь с таким email не был найден',
-  INVALID_PASSWORD = 'Неверный пароль',
+export enum ERROR_CODES {
+  'auth/invalid-email' = 'Пользователь с таким email не был найден',
+  'auth/wrong-password' = 'Неверный пароль',
   auth = 'Пожалуйста войдите в систему',
 }
 

@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { getCurrentUser } from 'vuefire'
 //import Home from '../views/Home.vue'
 //import store from '../store/'
 //import { nextTick } from 'vue'
@@ -50,18 +51,13 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach((to, from, next) => {
-  const requireAuth = to.meta.auth
+router.beforeEach(async (to, from, next) => {
+  if (to.meta.auth) {
+    const currentUser = await getCurrentUser()
 
-  console.log(requireAuth)
-
-  // if (requireAuth && store.getters['auth/isAuthenticated']) {
-  //   next()
-  // } else if (requireAuth && !store.getters['auth/isAuthenticated']) {
-  //   next('/auth?message=auth')
-  // } else {
-  //   next()
-  // }
+    if (!currentUser) next('/auth?message=auth')
+    else next()
+  } else next()
 })
 
 export default router

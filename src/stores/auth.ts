@@ -1,52 +1,37 @@
-import axios, { AxiosError } from 'axios'
-import { error } from '../utils/error'
+import { error, ERROR_CODES } from '../utils/error'
 import { defineStore } from 'pinia'
 import { useRootStore } from './root'
-
-const TOKEN_KEY = 'jwt-token'
-
-interface State {
-  token: string | null
-}
+import { useFirebaseAuth } from 'vuefire'
+import { FirebaseError } from 'firebase/app'
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { FormField } from '../use/login-form'
 
 export const useAuthStore = defineStore('auth', {
-  state: (): State => ({
-    token: localStorage.getItem(TOKEN_KEY),
-  }),
   actions: {
-    setToken(token: string) {
-      this.token = token
-      localStorage.setItem(TOKEN_KEY, token)
-    },
-    logout() {
-      this.token = null
-      localStorage.removeItem(TOKEN_KEY)
-    },
-    async login(payload: never) {
-      const root = useRootStore()
+    async logout() {
+      const auth = useFirebaseAuth()
 
       try {
-        const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.VUE_APP_FB_KEY}`
+        if (auth) await signOut(auth)
+      } catch (e) {
+        /* empty */
+      }
+    },
+    async login({ email, password }: FormField) {
+      const root = useRootStore()
+      const auth = useFirebaseAuth()
 
-        const { data } = await axios.post(url, {
-          // @ts-ignore
-          ...payload,
-          returnSecureToken: true,
-        })
-
-        this.setToken(data.idToken)
+      try {
+        if (auth) await signInWithEmailAndPassword(auth, email, password)
         root.clearMessage()
       } catch (e) {
-        if (e instanceof AxiosError)
+        if (e instanceof FirebaseError)
           root.setMessage({
-            value: error(e.response?.data.error.message),
+            value: error(e.code as keyof typeof ERROR_CODES),
             type: 'danger',
           })
         throw new Error()
       }
     },
-  },
-  getters: {
-    isAuthenticated: (state) => !!state.token,
   },
 })
