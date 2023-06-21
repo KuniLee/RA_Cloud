@@ -1,20 +1,17 @@
 <template>
   <h3 class="text-black"></h3>
-
   <LineChart ref="LineChartRef" :chart-data="testData" :options="options"></LineChart>
-  <!-- кнопка сброса масштаба -->
-  <!-- <button class="btn" @click="reset">Сброс</button> -->
 </template>
 
-<script>
+<script lang="ts">
+// @ts-nocheck
 import { dataForChart } from '../../utils/dataForChart'
 import zoomPlugin from 'chartjs-plugin-zoom'
 import { Chart, registerables } from 'chart.js'
-import { LineChart } from 'vue-chart-3'
-import { ref, reactive, computed, watch } from 'vue'
 import 'chartjs-adapter-date-fns'
-import { useStore } from 'vuex'
-//import 'chartjs-adapter-date-fns'
+import { LineChart } from 'vue-chart-3'
+import { ref, computed } from 'vue'
+import { useChartStore } from '../../stores/chart'
 Chart.register(...registerables, zoomPlugin)
 Chart.defaults.datasets.line.showLine = true
 
@@ -22,7 +19,7 @@ export default {
   components: { LineChart },
   props: ['chartData'],
   setup(props) {
-    const store = useStore()
+    const store = useChartStore()
     const LineChartRef = ref()
 
     const options = computed(() => {
@@ -31,16 +28,6 @@ export default {
         interaction: {
           mode: 'index',
           intersect: false,
-        },
-
-        //showLine: true, // disable for all datasets,
-        layout: {
-          //padding: { right: 80 },
-        },
-        datasets: {
-          line: {
-            //pointRadius: 0.1, // disable for all `'line'` datasets
-          },
         },
         scales: {
           x: {
@@ -60,14 +47,9 @@ export default {
         responsive: true,
         plugins: {
           zoom: {
-            // limits: {
-            //   x: { min: 0, max: Date.now(), minRange: 50 },
-            //   // y: { min: 0, max: 100, minRange: 20 },
-            // },
             pan: {
               enabled: false,
               mode: 'x',
-              //threshold: 10,
             },
             zoom: {
               wheel: {
@@ -99,11 +81,13 @@ export default {
       }
 
       if (props.chartData.length !== 0) {
+        // eslint-disable-next-line no-prototype-builtins
         if (props.chartData[0].hasOwnProperty('hour')) {
           opt.scales.x.time.unit = 'hour'
           opt.scales.x.time.tooltipFormat = 'час:H - dd LLLL R'
         }
 
+        // eslint-disable-next-line no-prototype-builtins
         if (props.chartData[0].hasOwnProperty('DAYOFMONTH')) {
           opt.scales.x.time.unit = 'day'
           opt.scales.x.time.tooltipFormat = 'dd LLLL R'
@@ -129,11 +113,10 @@ export default {
           pointRadius: 5,
           data: value,
           hidden: false,
-          label: store.state.chart.labelMap[key],
+          label: store.labelMap[key],
           backgroundColor: 'black',
-          borderColor: store.state.chart.colorMap[key],
-          //borderWidth: 8,
-          color: store.state.chart.colorMap[key],
+          borderColor: store.colorMap[key],
+          color: store.colorMap[key],
           pointStyle: 'circle',
           rotation: 90,
           tension: 0.2,

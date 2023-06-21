@@ -3,13 +3,13 @@
     <h1>Войти в систему</h1>
     <div :class="['form-control', { invalid: eError }]">
       <label for="email">Email</label>
-      <input id="email" v-model="email" placeholder="Тест: test@mail.ru пароль: 123456" type="email" @blur="eBrur" />
+      <input id="email" v-model="email" placeholder="Тест: test@mail.ru пароль: 123456" type="email" @blur="eBlur" />
       <small v-if="eError">{{ eError }}</small>
     </div>
 
     <div :class="['form-control', { invalid: pError }]">
       <label for="password">Пароль</label>
-      <input id="password" v-model="password" type="password" @blur="pBrur" />
+      <input id="password" v-model="password" type="password" @blur="pBlur" />
       <small v-if="pError">{{ pError }}</small>
     </div>
     <button class="btn primary" type="submit" :disabled="isSubmitting || isTooManyAttempts">Войти</button>

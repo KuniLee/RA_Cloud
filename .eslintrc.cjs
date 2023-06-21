@@ -17,6 +17,7 @@ module.exports = {
     },
     plugins: [],
     rules: {
+        'vue/require-prop-types': 'off',
         'vue/multi-word-component-names': 'off',
         'comma-dangle': ['error', 'only-multiline'],
         '@typescript-eslint/explicit-function-return-type': 'off',

@@ -4,13 +4,13 @@ import { useRootStore } from './root'
 
 type Parameter = 'temp' | 'humid'
 
-type Data = {
+export type Data = {
   average: number
   parameter: Parameter
 }
 
 type State = {
-  dataBaseData: string
+  dataBaseData: Array<Data>
 }
 
 enum ReportType {
@@ -24,7 +24,7 @@ export const useDBStore = defineStore('database', {
     dataBaseData: [],
   }),
   actions: {
-    async report(input: { type: ReportType; date: string; offsetInHours: string }) {
+    async report(input: { type: ReportType | null; date: string | null; offsetInHours: string | null }) {
       const { setMessage } = useRootStore()
       const typeMap: Record<keyof typeof ReportType, string> = { week: 'DAYOFMONTH', month: 'DAYOFMONTH', date: 'hour' }
 
@@ -42,10 +42,9 @@ export const useDBStore = defineStore('database', {
         const { data } = (await axios.post('/', JSON.stringify({ query: query })).catch(function (error) {
           console.log('Ошибка загрузки:', error)
         })) as {
-          data: { data: Data }
+          data: { data: { report: Data[] } }
         }
 
-        console.log('полученно', data.data.data.report)
         this.dataBaseData = data.data.report
       } catch (e) {
         if (e instanceof Error)

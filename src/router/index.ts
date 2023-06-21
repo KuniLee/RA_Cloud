@@ -14,15 +14,6 @@ const routes: RouteRecordRaw[] = [
       auth: true,
     },
   },
-  // {
-  //   path: '/help',
-  //   name: 'Help',
-  //   component: () => import('../views/Help.vue'),
-  //   meta: {
-  //     layout: 'main',
-  //     auth: true,
-  //   },
-  // },
   {
     path: '/auth',
     name: 'Auth',

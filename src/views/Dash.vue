@@ -13,8 +13,7 @@
 
     <app-loader v-if="loading"></app-loader>
     <div>
-      <!--      <chart v-if="requests.length !== 0 && !loading" :chart-data="requests"></chart>-->
-
+      <chart v-if="requests.length !== 0 && !loading" :chart-data="requests"></chart>
       <h3 v-if="noDataMsg && !loading" class="text-center text-black">Нет данных</h3>
     </div>
 
@@ -46,7 +45,7 @@ export default {
     AppModel,
     AppLoader,
     ReportInput,
-    //Chart,
+    Chart,
   },
   setup() {
     const socket = io(import.meta.env.VITE_BACK_END_URL || '')

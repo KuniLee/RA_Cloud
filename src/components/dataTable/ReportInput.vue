@@ -12,20 +12,17 @@
     <label for="date">{{ typeMap[reportType] }}</label>
     <input id="date" v-model="inputDate" :type="reportType" />
   </div>
-  <!-- </form> -->
 </template>
 
-<script>
+<script lang="ts">
+// @ts-nocheck
 import { dateFromWeek } from '../../utils/dateFromWeek'
-import dateFormat from 'dateformat'
 import { ref, computed, watch, reactive, onMounted } from 'vue'
 export default {
   props: ['modelValue'],
   emits: ['update:modelValue'],
 
   setup(_, { emit }) {
-    const d = new Date()
-    // const timeEnd = ref(d.toLocaleTimeString().slice(0, -3))
     const reportType = ref('')
 
     const typeMap = reactive({
@@ -33,8 +30,6 @@ export default {
       month: 'Введите месяц',
       date: 'Введите день',
     })
-    // const dateStart = ref('')
-    // const dateEnd = ref(dateFormat(d, 'isoDate'))
     const inputDate = ref('')
 
     const allIuputs = computed(() => {
@@ -50,7 +45,7 @@ export default {
       let hours = (Math.abs(offset) - mins) / 60
 
       if (mins < 10) mins = '0' + mins
-      if (Math.sign(offset) == -1) hours = '-' + hours
+      if (Math.sign(offset) === -1) hours = '-' + hours
       else hours = '+' + hours
 
       return hours + ':' + mins
@@ -59,10 +54,6 @@ export default {
     onMounted(() => {
       inputDate.value = null
       reportType.value = null
-    })
-
-    watch(reportType, (values) => {
-      inputDate.value = null
     })
 
     watch(allIuputs, (values) => {
@@ -75,8 +66,6 @@ export default {
         type: values.reportType,
         date: input,
         offsetInHours: getTimeZone(),
-        // startDT: Date.parse(values.dateStart + 'T' + values.timeStart),
-        // endDT: Date.parse(values.dateEnd + 'T' + values.timeEnd),
       })
     })
 
