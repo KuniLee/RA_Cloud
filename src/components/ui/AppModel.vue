@@ -5,20 +5,13 @@
 
   <div class="modal">
     <h3 v-if="title">{{ title }}</h3>
-
     <slot></slot>
   </div>
 </template>
 
-<script>
-export default {
-  emits: ['close'],
-  props: {
-    title: {
-      type: String,
-    },
-  },
-}
+<script setup lang="ts">
+defineEmits(['close'])
+defineProps<{ title: string }>()
 </script>
 
 <style></style>

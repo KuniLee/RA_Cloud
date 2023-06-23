@@ -1,8 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import { getCurrentUser } from 'vuefire'
-//import Home from '../views/Home.vue'
-//import store from '../store/'
-//import { nextTick } from 'vue'
 
 const routes: RouteRecordRaw[] = [
   {

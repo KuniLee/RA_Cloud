@@ -4,15 +4,6 @@
     <h3>RA-cloud</h3>
 
     <ul class="navbar-menu">
-      <!--      <li>-->
-      <!--        <router-link to="/">Окно</router-link>-->
-      <!--      </li>-->
-      <!--      <li>-->
-      <!--        <router-link to="/help">Помощь</router-link>-->
-      <!--      </li>-->
-      <!-- <li>
-        <a href="#" @click.prevent="openSidebar">Сообщение</a>
-      </li> -->
       <li>
         <a href="#" @click.prevent="logout">Выйти</a>
       </li>
@@ -20,22 +11,15 @@
   </nav>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { useRouter } from 'vue-router'
-// import { useStore } from 'vuex'
-export default {
-  setup() {
-    const router = useRouter()
-    // const store = useStore()
+import { useAuthStore } from '../stores/auth'
+const store = useAuthStore()
+const router = useRouter()
 
-    return {
-      logout: () => {
-        // store.commit('auth/logout')
-        router.push('/auth')
-      },
-      // openSidebar: () => store.commit('openSidebar'),
-    }
-  },
+const logout = () => {
+  store.logout()
+  router.push('/auth')
 }
 </script>
 

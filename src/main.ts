@@ -8,9 +8,9 @@ import { createPinia } from 'pinia'
 
 createApp(App)
   .use(createPinia())
-  .use(router)
   .use(VueFire, {
     firebaseApp: app,
     modules: [VueFireAuth()],
   })
+  .use(router)
   .mount('#app')
